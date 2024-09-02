@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import puppeteer from 'puppeteer';
-import chromium from 'chrome-aws-lambda';
+// import puppeteer from 'puppeteer-core';
+// import chromium from '@sparticuz/chromium';
+
+let chromium: { args: any; executablePath: any; headless: any; };
+let puppeteer: { launch: (arg0: { args: any; executablePath: any; headless: any; }) => any; };
 
 interface Card {
   src: string;
@@ -9,6 +12,13 @@ interface Card {
 }
 
 const isLocal = !process.env.AWS_LAMBDA_FUNCTION_NAME;
+if (isLocal) {
+  puppeteer = require('puppeteer');
+}
+else {
+  chromium = require('@sparticuz/chromium');
+  puppeteer = require('puppeteer-core');
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { code } = req.query;
@@ -29,8 +39,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     } else {
       // Vercel環境でchrome-aws-lambdaを使用
+
       browser = await puppeteer.launch({
-        args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
+        args: chromium.args,
         executablePath: await chromium.executablePath,
         headless: chromium.headless,
       });
