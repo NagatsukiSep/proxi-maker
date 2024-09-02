@@ -39,11 +39,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     } else {
       // Vercel環境でchrome-aws-lambdaを使用
-      console.log('launching puppeteer');
+      const executablePath = await chromium.executablePath;
       browser = await puppeteer.launch({
         args: chromium.args,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
+        executablePath,
+        headless: false,
       });
     }
     const page = await browser.newPage();
