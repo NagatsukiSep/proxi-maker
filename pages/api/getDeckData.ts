@@ -39,14 +39,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     } else {
       // Vercel環境でchrome-aws-lambdaを使用
-      const executablePath = await await chromium.executablePath(
-        "https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar",
-      ),
-        browser = await puppeteer.launch({
-          args: chromium.args,
-          executablePath,
-          headless: false,
-        });
+      browser = await puppeteer.launch({
+        args: chromium.args,
+        executablePath: await await chromium.executablePath(
+          "https://github.com/Sparticuz/chromium/releases/download/v116.0.0/chromium-v116.0.0-pack.tar",
+        ),
+        headless: false,
+      });
     }
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle2' });
