@@ -137,9 +137,9 @@ export default function Home() {
         </button>
       </div>
 
-      {loading && <p className="text-pink-600 font-semibold">Loading...</p>}
+      {loading && <p className="text-pink-600 font-semibold">Loading...<br />処理には10秒程度かかることがあります。</p>}
       {!loading && deckData.length === 0 && <p className="text-pink-600 font-semibold">No data</p>}
-      {!loading && error && <div><p className="text-red-600 font-semibold">
+      {error && <div><p className="text-red-600 font-semibold">
         Error: {error.code} - {error.message}
       </p>
         {error.code === '504' && <p className="text-pink-600 font-semibold">
