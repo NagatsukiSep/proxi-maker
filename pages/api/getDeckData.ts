@@ -20,8 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   let browser;
   try {
-    let executablePath: string | undefined;
-
     if (isLocal) {
       // ローカル環境でpuppeteerを使用
       browser = await puppeteer.launch({
@@ -31,15 +29,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     } else {
       // Vercel環境でchrome-aws-lambdaを使用
-      executablePath = await chromium.executablePath;
-
-      if (!executablePath) {
-        throw new Error('Chrome executable path could not be found in the Vercel environment.');
-      }
-
       browser = await puppeteer.launch({
-        args: chromium.args,
-        executablePath,
+        args: [...chromium.args, '--no-sandbox', '--disable-setuid-sandbox'],
+        executablePath: await chromium.executablePath,
         headless: chromium.headless,
       });
     }
