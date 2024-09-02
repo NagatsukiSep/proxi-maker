@@ -137,15 +137,8 @@ export default function Home() {
         </button>
       </div>
 
-      {loading && <p className="text-pink-600 font-semibold">Loading...<br />処理には10秒程度かかることがあります。</p>}
+      {loading && <p className="text-pink-600 font-semibold">Loading...<br />処理には10秒程度かかることがあります。<br />初回実行時は高確率でタイムアウトになります。15秒以上ロードが続く場合は再度反映させてください。</p>}
       {!loading && deckData.length === 0 && <p className="text-pink-600 font-semibold">No data</p>}
-      {error && <div><p className="text-red-600 font-semibold">
-        Error: {error.code} - {error.message}
-      </p>
-        {error.code === '504' && <p className="text-pink-600 font-semibold">
-          初回実行時はタイムアウトになることがあります。再度実行してください。
-        </p>}
-      </div>}
       {!loading && deckData.length > 0 && (
         <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse bg-white rounded-lg shadow-lg overflow-hidden">
