@@ -16,7 +16,7 @@ if (isLocal) {
   puppeteer = require('puppeteer');
 }
 else {
-  chromium = require('@sparticuz/chromium');
+  chromium = require('chrome-aws-lambda');
   puppeteer = require('puppeteer-core');
 }
 
