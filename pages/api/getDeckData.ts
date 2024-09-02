@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import puppeteer from 'puppeteer-core';
+import puppeteer from 'puppeteer';
 import chromium from 'chrome-aws-lambda';
 
 interface Card {
@@ -24,7 +24,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (isLocal) {
       // ローカル環境でpuppeteerを使用
-      browser = await puppeteer.launch({ headless: true });
+      browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        executablePath: process.env.CHROMIUM_PATH,
+        headless: true,
+      });
     } else {
       // Vercel環境でchrome-aws-lambdaを使用
       executablePath = await chromium.executablePath;
