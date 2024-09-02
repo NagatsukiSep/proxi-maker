@@ -28,6 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const x = mmToPt(15 + (count % 3) * 61);   // 左から20mm
         const y = mmToPt(20 + (2 - Math.floor(count % 9 / 3)) * 86); // 上から20mm
 
+        if (count % 9 === 0 && count !== 0) {
+          page = pdfDoc.addPage([595.28, 841.89]);
+        }
         page.drawImage(image, {
           x: x,
           y: y,
@@ -36,9 +39,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         count++;
 
-        if (count % 9 === 0) {
-          page = pdfDoc.addPage([595.28, 841.89]);
-        }
 
       }
     }));
