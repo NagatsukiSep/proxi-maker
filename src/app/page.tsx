@@ -70,6 +70,11 @@ export default function Home() {
   }
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<{ code: string; message: string } | null>(null);
+  const handleError = (e: any) => {
+    setError({ code: e.code || 'unknown', message: e.message || 'An unknown error occurred' });
+    console.error(e);
+  };
 
   const handleDownload = async () => {
     try {
@@ -92,7 +97,7 @@ export default function Home() {
       a.download = 'generated.pdf';
       a.click();
     } catch (e) {
-      console.error(e);
+      handleError(e);
     }
   };
 
@@ -134,7 +139,13 @@ export default function Home() {
 
       {loading && <p className="text-pink-600 font-semibold">Loading...</p>}
       {!loading && deckData.length === 0 && <p className="text-pink-600 font-semibold">No data</p>}
-
+      {!loading && error && <div><p className="text-red-600 font-semibold">
+        Error: {error.code} - {error.message}
+      </p>
+        {error.code === '504' && <p className="text-pink-600 font-semibold">
+          初回実行時はタイムアウトになることがあります。再度実行してください。
+        </p>}
+      </div>}
       {!loading && deckData.length > 0 && (
         <div className="w-full overflow-x-auto">
           <table className="w-full border-collapse bg-white rounded-lg shadow-lg overflow-hidden">
