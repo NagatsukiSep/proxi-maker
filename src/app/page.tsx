@@ -81,6 +81,8 @@ export default function Home() {
     console.error(e);
   };
 
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const handleDownload = async () => {
     try {
       const selectedCards = deckData.filter(card => card.isSelected);
@@ -88,6 +90,7 @@ export default function Home() {
         alert("Please select at least one card.");
         return;
       }
+      setIsDownloading(true);
       const response = await fetch('/api/generatePDF', {
         method: 'POST',
         headers: {
@@ -104,6 +107,7 @@ export default function Home() {
     } catch (e) {
       handleError(e);
     }
+    setIsDownloading(false);
   };
 
   return (
@@ -138,7 +142,7 @@ export default function Home() {
           onClick={handleDownload}
           className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors duration-300 w-full sm:w-auto"
         >
-          PDFにしてダウンロード
+          {isDownloading ? "PDF生成中" : "PDFにしてダウンロード"}
         </button>
       </div>
 
