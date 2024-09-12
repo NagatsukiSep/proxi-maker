@@ -69,6 +69,11 @@ export default function Home() {
     setNewCard({ src: "", name: "", count: 1, id: "", isSelected: true });
   }
 
+  const deleteCard = (uuid: string) => {
+    const newDeckData = deckData.filter(card => card.id !== uuid);
+    setDeckData(newDeckData);
+  }
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<{ code: string; message: string } | null>(null);
   const handleError = (e: any) => {
@@ -144,7 +149,8 @@ export default function Home() {
           <table className="w-full border-collapse bg-white rounded-lg shadow-lg overflow-hidden">
             <thead>
               <tr className="bg-pink-200 text-pink-800">
-                <th className="p-4">カード</th>
+                <th className="w-16"></th>
+                <th className="p-4 w-[100px]">カード</th>
                 <th className="p-4">カード名</th>
                 <th className="p-4">枚数</th>
                 <th className="p-4">
@@ -161,6 +167,14 @@ export default function Home() {
             <tbody>
               {deckData.map((card, index) => (
                 <tr key={index} className="even:bg-pink-100 odd:bg-pink-50">
+                  <td className="p-4 text-center">
+                    <button
+                      onClick={() => deleteCard(card.id)}
+                      className="bg-red-500 text-white rounded-full px-2 py-1 text-xs font-bold"
+                    >
+                      ×
+                    </button>
+                  </td>
                   <td className="p-4">
                     <div className="w-[100px] h-[58px] overflow-hidden relative rounded-lg mx-auto">
                       <img src={card.src} alt={card.name} className="absolute w-full rounded-lg shadow-md -top-[11px]" />
@@ -169,8 +183,18 @@ export default function Home() {
                   <td className="p-4 text-center">{card.name}</td>
                   <td className="p-4 text-center">
                     {card.count}
-                    <button onClick={() => addCardCount(card.id, "add")} className="ml-2 bg-pink-300 text-pink-800 rounded-full px-2 py-1 text-xs font-bold">+</button>
-                    <button onClick={() => addCardCount(card.id, "sub")} className="ml-2 bg-pink-300 text-pink-800 rounded-full px-2 py-1 text-xs font-bold">-</button>
+                    <button
+                      onClick={() => addCardCount(card.id, "add")}
+                      className="ml-2 bg-pink-300 text-pink-800 rounded-full px-2 py-1 text-xs font-bold"
+                    >
+                      +
+                    </button>
+                    <button
+                      onClick={() => addCardCount(card.id, "sub")}
+                      className="ml-2 bg-pink-300 text-pink-800 rounded-full px-2 py-1 text-xs font-bold"
+                    >
+                      -
+                    </button>
                   </td>
                   <td className="p-4 text-center">
                     <input
@@ -183,6 +207,7 @@ export default function Home() {
                 </tr>
               ))}
               <tr className="even:bg-pink-100 odd:bg-pink-50 text-pink-800">
+                <td className="p-4"></td>
                 <td className="p-4"><img src="https://placehold.jp/28/fbcfe8/9d174d/100x58.png?text=?" className="rounded-lg shadow-md mx-auto" /></td>
                 <td className="p-4">
                   <input
